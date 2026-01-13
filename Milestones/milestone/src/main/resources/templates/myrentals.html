@@ -28,16 +28,19 @@
   </div>
 </nav>
 
-<!-- Main cntent -->
+<!-- Main content -->
 <div class="container mt-5 pt-5">
     <h2 class="mb-4">My Rentals</h2>
+
     <div class="list-group">
         <div class="list-group-item" th:each="checkout : ${checkouts}">
             <h5 th:text="${checkout.movieTitle}">Movie Title</h5>
-            <p>Checked Out By: <span th:text="${checkout.username}">Username</span></p>
-            <a th:href="@{'/return/' + ${checkout.id}}" class="btn btn-success btn-sm">Return</a>
+            <p>Checked out by: <span th:text="${checkout.username}">Username</span></p>
+            <a th:href="@{'/return/' + ${checkout.id}}" class="btn btn-sm btn-danger">Return</a>
         </div>
     </div>
+
+    <a th:href="@{/catalog}" class="btn btn-secondary mt-3">Back to Catalog</a>
 </div>
 
 </body>
