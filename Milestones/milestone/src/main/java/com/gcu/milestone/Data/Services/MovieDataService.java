@@ -13,7 +13,7 @@ import com.gcu.milestone.Models.movieModel;
 
 /**
  * Data access service for working with Movie records.
-*/
+ */
 @Service
 public class MovieDataService implements DataAccessInterface<movieModel> {
 
@@ -44,10 +44,9 @@ public class MovieDataService implements DataAccessInterface<movieModel> {
         return entity.map(this::convertFromEntity).orElse(null);
     }
 
-    
     @Override
     public movieModel findByName(String name) {
-        return null;
+        return null; // not implemented
     }
 
     /**
@@ -59,11 +58,23 @@ public class MovieDataService implements DataAccessInterface<movieModel> {
     }
 
     /**
-     * Update an existing movie row.
+     * Update an existing movie row without losing the image.
      */
     public boolean update(MovieEntity movie) {
-        movieRepository.save(movie);
-        return true;
+        Optional<MovieEntity> existingOpt = movieRepository.findById(movie.getId());
+        if (existingOpt.isPresent()) {
+            MovieEntity entityToSave = existingOpt.get();
+
+            // Only update the fields that change during checkout
+            entityToSave.setStatus(movie.getStatus());
+            entityToSave.setUserId(movie.getUserId());
+
+            // Do NOT touch the image, title, genre, price — they stay as-is
+
+            movieRepository.save(entityToSave);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -84,6 +95,7 @@ public class MovieDataService implements DataAccessInterface<movieModel> {
         entity.setStatus(model.getStatus());
         entity.setTitle(model.getTitle());
         entity.setUserId(model.getUserId());
+        entity.setImage(model.getImage()); // include image
         return entity;
     }
 
@@ -98,6 +110,7 @@ public class MovieDataService implements DataAccessInterface<movieModel> {
         model.setStatus(entity.getStatus());
         model.setTitle(entity.getTitle());
         model.setUserId(entity.getUserId());
+        model.setImage(entity.getImage()); // include image
         return model;
     }
 }

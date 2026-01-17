@@ -23,6 +23,11 @@
         <li class="nav-item">
           <a class="nav-link" th:href="@{/logout}">Logout</a>
         </li>
+		<li class="nav-item">
+		    <span class="navbar-text">
+		        Hello, <span th:text="${currentUser.username}">User</span>
+		    </span>
+		</li>
       </ul>
     </div>
   </div>
@@ -33,7 +38,7 @@
     <h2 class="mb-4">My Rentals</h2>
 
     <div class="list-group">
-        <div class="list-group-item" th:each="checkout : ${checkouts}">
+        <div class="list-group-item" th:each="checkout : ${rentals}">
             <h5 th:text="${checkout.movieTitle}">Movie Title</h5>
             <p>Checked out by: <span th:text="${checkout.username}">Username</span></p>
             <a th:href="@{'/return/' + ${checkout.id}}" class="btn btn-sm btn-danger">Return</a>

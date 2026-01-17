@@ -60,9 +60,9 @@ public class VideoRentalController {
         // Check credentials
         UserModel user = userService.findByUsernameAndPassword(username, password);
 
-        if (user == null) {
-            // Login failed: show error message on same page
-            model.addAttribute("error", "Invalid username or password.");
+        if (user == null) 
+        {
+            model.addAttribute("loginError", "No user found");
             return "login";
         }
 
@@ -72,6 +72,15 @@ public class VideoRentalController {
         // Go to catalog
         return "redirect:/catalog";
     }
+    
+    // ===== LOGOUT =====
+    @GetMapping("/logout")
+    public String logout(HttpSession session) 
+    {
+        session.invalidate();
+        return "redirect:/login";
+    }
+
 
     // ===== CATALOG =====
 
@@ -83,6 +92,8 @@ public class VideoRentalController {
         if (currentUser == null) {
             return "redirect:/login";
         }
+        
+        model.addAttribute("currentUser", currentUser);
 
         // Get all movies
         List<movieModel> movies = movieService.findAll();
@@ -130,6 +141,8 @@ public class VideoRentalController {
         if (currentUser == null) {
             return "redirect:/login";
         }
+        
+        model.addAttribute("currentUser", currentUser);
 
         int currentUserId = currentUser.getId();
 
